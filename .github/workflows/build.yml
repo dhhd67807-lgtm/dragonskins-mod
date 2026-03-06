@@ -1,0 +1,48 @@
+name: Build DragonSkins Mod
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        minecraft: [
+          "1.16.2", "1.17.1", "1.18.1", "1.18.2",
+          "1.19", "1.19.2", "1.19.3", "1.19.4",
+          "1.20", "1.20.1", "1.20.2", "1.20.4", "1.20.6",
+          "1.21.1", "1.21.3", "1.21.4"
+        ]
+      fail-fast: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build for Minecraft ${{ matrix.minecraft }}
+        run: ./gradlew build --no-daemon
+        env:
+          MINECRAFT_VERSION: ${{ matrix.minecraft }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: dragonskins-${{ matrix.minecraft }}
+          path: build/libs/*.jar
+          retention-days: 30

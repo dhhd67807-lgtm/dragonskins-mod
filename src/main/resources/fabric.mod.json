@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "dragonskins",
+  "version": "${version}",
+  "name": "DragonSkins",
+  "description": "Custom skins, capes, and nametag system for Minecraft",
+  "authors": [
+    "DragonClient"
+  ],
+  "contact": {
+    "homepage": "https://dragonclient.dev",
+    "sources": "https://github.com/dhhd67807-lgtm/dragonclient-fabric"
+  },
+  "license": "MIT",
+  "icon": "assets/dragonskins/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "gg.dragonskins.DragonSkinsClient"
+    ]
+  },
+  "mixins": [
+    "dragonskins.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": ">=1.16.2",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
