@@ -42,7 +42,8 @@ jobs:
       - name: Rename JAR file
         run: |
           mkdir -p release
-          cp build/libs/dragonskins-*.jar release/dragonskins-${{ matrix.minecraft }}.jar
+          # Find the actual JAR file (excluding sources)
+          find build/libs -name "*.jar" ! -name "*-sources.jar" -exec cp {} release/dragonskins-${{ matrix.minecraft }}.jar \;
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
