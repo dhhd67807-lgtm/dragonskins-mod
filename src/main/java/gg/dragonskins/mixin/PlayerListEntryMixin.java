@@ -16,11 +16,15 @@ public abstract class PlayerListEntryMixin {
     @Shadow
     public abstract GameProfile getProfile();
 
-    @Inject(method = "getSkinTextures", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getSkinTextures", at = @At("HEAD"), cancellable = true, require = 0)
     private void onGetSkinTexture(CallbackInfoReturnable<Identifier> cir) {
-        Identifier customSkin = SkinLoader.loadSkin(getProfile());
-        if (customSkin != null) {
-            cir.setReturnValue(customSkin);
+        try {
+            Identifier customSkin = SkinLoader.loadSkin(getProfile());
+            if (customSkin != null) {
+                cir.setReturnValue(customSkin);
+            }
+        } catch (Exception e) {
+            // Silently fail
         }
     }
 }

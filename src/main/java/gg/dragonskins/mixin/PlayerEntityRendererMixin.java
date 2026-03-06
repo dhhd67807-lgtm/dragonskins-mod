@@ -16,7 +16,8 @@ public class PlayerEntityRendererMixin {
 
     @Inject(
         method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
-        at = @At("HEAD")
+        at = @At("HEAD"),
+        require = 0
     )
     private void onRenderLabel(
         AbstractClientPlayerEntity player,
@@ -26,13 +27,17 @@ public class PlayerEntityRendererMixin {
         int light,
         CallbackInfo ci
     ) {
-        NametagRenderer.renderCustomNametag(
-            matrices,
-            vertexConsumers,
-            player.getUuid(),
-            text,
-            ((PlayerEntityRenderer)(Object)this).getTextRenderer(),
-            light
-        );
+        try {
+            NametagRenderer.renderCustomNametag(
+                matrices,
+                vertexConsumers,
+                player.getUuid(),
+                text,
+                ((PlayerEntityRenderer)(Object)this).getTextRenderer(),
+                light
+            );
+        } catch (Exception e) {
+            // Silently fail
+        }
     }
 }
